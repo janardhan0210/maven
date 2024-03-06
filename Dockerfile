@@ -1,7 +1,8 @@
-FROM maven:15.3.0.-openjdk-11-slim AS build
+# Use an appropriate base image with JDK and Maven installed
+FROM maven:3.8.4-openjdk-11-slim AS build
 
 # Set the working directory in the container
-WORKDIR /home/janardhan/project1/maven
+WORKDIR /app
 
 # Copy the project's pom.xml file into the container
 COPY pom.xml .
@@ -19,7 +20,7 @@ RUN mvn package
 FROM openjdk:11-jre-slim AS runtime
 
 # Set the working directory in the container
-WORKDIR //home/janardhan/project1/maven
+WORKDIR /app
 
 # Copy the compiled application JAR file from the build stage
 COPY --from=build /app/target/your-project.jar ./your-project.jar
@@ -28,4 +29,4 @@ COPY --from=build /app/target/your-project.jar ./your-project.jar
 EXPOSE 8082
 
 # Command to run your application when the container starts
-CMD ["java", "-jar", "maven.jar"]
+CMD ["java", "-jar", "your-project.jar"]
